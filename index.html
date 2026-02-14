@@ -5,24 +5,152 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PURPLE_PROTOCOL | Soulmate Confirmation</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet" />
   <style>
+    :root {
+      --ink: #f7e9ff;
+      --lavender: #b58cff;
+      --orchid: #7c2cff;
+      --violet: #4a0f8f;
+      --night: #07020f;
+      --plum: #180625;
+      --glow: rgba(181, 140, 255, 0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
+      min-height: 100vh;
       overflow: hidden;
-      background: #000;
-      color: #fff;
-      font-family: 'Courier New', Courier, monospace;
+      background: radial-gradient(1200px 800px at 20% 10%, #2a0b52 0%, #0a0314 45%, #05020b 100%);
+      color: var(--ink);
+      font-family: 'Playfair Display', serif;
+      letter-spacing: 0.02em;
+    }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .ambient::before,
+    .ambient::after {
+      content: '';
+      position: absolute;
+      inset: -20%;
+      background:
+        radial-gradient(600px 600px at 70% 20%, rgba(181, 140, 255, 0.18), transparent 60%),
+        radial-gradient(500px 500px at 20% 70%, rgba(124, 44, 255, 0.2), transparent 55%),
+        radial-gradient(400px 400px at 80% 80%, rgba(95, 19, 170, 0.2), transparent 60%);
+      filter: blur(10px);
+      animation: drift 22s ease-in-out infinite alternate;
+    }
+
+    .ambient::after {
+      opacity: 0.35;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 6px);
+      mix-blend-mode: screen;
+      animation: shimmer 18s linear infinite;
+    }
+
+    .math-field {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
+      padding: 8vh 6vw;
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(0.75rem, 1.4vw, 1.1rem);
+      color: rgba(181, 140, 255, 0.25);
+      text-transform: uppercase;
+    }
+
+    .math-field span {
+      opacity: 0.6;
+      animation: floaty 10s ease-in-out infinite;
+    }
+
+    .math-field span:nth-child(2n) {
+      color: rgba(247, 233, 255, 0.4);
+      animation-duration: 14s;
+    }
+
+    .math-field span:nth-child(3n) {
+      color: rgba(124, 44, 255, 0.35);
+      animation-duration: 12s;
     }
 
     #app {
       width: 100vw;
       height: 100vh;
       position: relative;
+      z-index: 2;
+    }
+
+    @keyframes drift {
+      0% {
+        transform: translate3d(-2%, -1%, 0) scale(1);
+      }
+
+      100% {
+        transform: translate3d(2%, 1%, 0) scale(1.05);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+      }
+
+      100% {
+        transform: translate3d(-2%, 2%, 0) rotate(1deg);
+      }
+    }
+
+    @keyframes floaty {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
     }
   </style>
 </head>
 
 <body>
+  <div class="ambient">
+    <div class="math-field">
+      <span>love + logic</span>
+      <span>proof of us</span>
+      <span>pi = 3.14159</span>
+      <span>sum of hearts</span>
+      <span>infinite + you</span>
+      <span>theta whispers</span>
+      <span>graph of destiny</span>
+      <span>limit = forever</span>
+      <span>vector of us</span>
+      <span>derivative of joy</span>
+      <span>cosmic constants</span>
+      <span>set of soulmates</span>
+    </div>
+  </div>
   <div id="app"></div>
   <script type="module" src="/src/entry.js"></script>
 </body>
