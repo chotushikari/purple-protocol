@@ -18,17 +18,17 @@
     max-width: 600px;
     background: rgba(0, 0, 0, 0.8);
     padding: 2rem;
-    border: 1px solid var(--neon-green);
-    box-shadow: 0 0 20px var(--neon-green);
+    border: 1px solid var(--neon-purple);
+    box-shadow: 0 0 20px var(--neon-purple);
     font-family: 'Courier New', monospace;
 }
 
 .terminal-text {
-    color: var(--neon-green);
+    color: var(--neon-purple);
     font-size: 1.2rem;
     line-height: 1.5;
     min-height: 60px;
-    text-shadow: 0 0 5px var(--neon-green);
+    text-shadow: 0 0 5px var(--neon-purple);
 }
 
 .input-group {
@@ -47,7 +47,7 @@
 #name-input {
     background: transparent;
     border: none;
-    border-bottom: 2px solid var(--neon-green);
+    border-bottom: 2px solid var(--neon-purple);
     color: var(--neon-purple);
     font-family: inherit;
     font-size: 1.5rem;

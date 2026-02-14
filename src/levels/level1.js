@@ -10,7 +10,7 @@ export function mountLevel1(container, onComplete, onCreatorMode) {
     <div id="terminal-ui">
       <div id="typewriter" class="terminal-text"></div>
       <div class="input-group" id="input-container">
-        <span style="color: var(--neon-green)">></span>
+        <span style="color: var(--neon-purple)">></span>
         <input type="text" id="name-input" autocomplete="off" autofocus>
       </div>
     </div>
@@ -27,7 +27,7 @@ function startMatrixRain() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const symbols = "∑π∞∫√≈≠≤≥÷COMBINATORICS10";
+    const symbols = "∑π∞∫√≈≠≤≥÷tan(x)cos(y)♥♡love+=-";
     const fontSize = 16;
     const columns = canvas.width / fontSize;
     const drops = Array(Math.floor(columns)).fill(1);
@@ -36,7 +36,7 @@ function startMatrixRain() {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = '#6cff8e'; // Matrix Green
+        ctx.fillStyle = '#b25cff'; // Neon Purple
         ctx.font = fontSize + 'px monospace';
 
         for (let i = 0; i < drops.length; i++) {
@@ -56,11 +56,11 @@ function startMatrixRain() {
 function startTerminalSequence(onComplete, onCreatorMode) {
     const typed = new Typed('#typewriter', {
         strings: [
-            "SYSTEM BOOT SEQUENCE INITIATED...",
-            "SCANNING BIOMETRICS...",
-            "ANALYZING AURA...",
-            "SUBJECT DETECTED: HIGH INTELLIGENCE.",
-            "IDENTIFY YOURSELF."
+            "CALCULATING COMPATIBILITY...",
+            "SOLVING FOR X WHERE X = YOU...",
+            "INTEGRATING FEELINGS OVER TIME...",
+            "RESULT: INFINITE LOVE DETECTED.",
+            "ENTER PASSPHRASE TO CONFIRM."
         ],
         typeSpeed: 30,
         backSpeed: 10,
