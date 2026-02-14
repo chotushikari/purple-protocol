@@ -137,7 +137,8 @@ function initThreeJS(canvas, rawMemories, onNextLevel) {
     createFloatingGeo(); // NEW: 3D Shapes
 
     // 4. Interaction
-    setupInteraction();
+    const constellationInteraction = createConstellation(); // NEW: Constellation System
+    setupInteraction(constellationInteraction);
 
     // NEW: Audio Logic
     const audio = new Audio(config.galaxy.musicTrack);
@@ -202,10 +203,96 @@ function initThreeJS(canvas, rawMemories, onNextLevel) {
         // Effect Updates
         updateShootingStars();
         updateLightning();
+        updateConstellationLines(); // NEW
 
         renderer.render(scene, camera);
     };
     animate();
+}
+
+// === CONSTELLATION SYSTEM ===
+let constellationLines = [];
+let constellationNodes = [];
+let activeConnections = [];
+
+const CONSTELLATION_DATA = [
+    { date: "13 Dec 2023", label: "First Talk", desc: "Essay on 'Meri Bandi'" },
+    { date: "15 Feb 2024", label: "Assignment", desc: "Done by 'My Love'" },
+    { date: "7 Apr 2024", label: "First Meet", desc: "Purple Tshirt + Blue Denim" },
+    { date: "21 Sep 2024", label: "Call", desc: "Hassi hai" },
+    { date: "3 May 2025", label: "Arcade Fight", desc: "Earphones lost" },
+    { date: "18 May 2025", label: "7hr+ Call", desc: "Before Exam Call" },
+    { date: "28 Sep 2025", label: "Dandiya Night", desc: "Dabocha Gaya" },
+    { date: "19 Nov 2025", label: "Confession", desc: "The 19 hour call" },
+    { date: "12 Dec 2025", label: "First Date", desc: "<3" }
+];
+
+function createConstellation() {
+    const radius = 60; // Inner curve vs main helix 120
+    const step = 80;   // Spread out
+
+    CONSTELLATION_DATA.forEach((item, i) => {
+        const angle = i * 0.8;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+        const z = -i * step - 200; // Start a bit ahead
+
+        // 1. The Star Node
+        const geo = new THREE.IcosahedronGeometry(2, 0);
+        const mat = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Gold
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(x, y, z);
+        mesh.userData = { type: 'constellation', data: item, id: i };
+
+        // Glow Sprite
+        const canvas = document.createElement('canvas');
+        canvas.width = 32; canvas.height = 32;
+        const ctx = canvas.getContext('2d');
+        const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+        grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        grad.addColorStop(1, 'rgba(255, 255, 0, 0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 32, 32);
+        const tex = new THREE.CanvasTexture(canvas);
+        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true }));
+        sprite.scale.set(10, 10, 1);
+        mesh.add(sprite);
+
+        // Label (Initially Hidden or Small)
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'constellation-label';
+        labelDiv.innerHTML = `<b>${item.date}</b><br>${item.label}`;
+
+        scene.add(mesh);
+        interactables.push(mesh);
+        constellationNodes.push(mesh);
+    });
+
+    return { nodes: constellationNodes };
+}
+
+function updateConstellationLines() {
+    // Animate drawn lines
+    activeConnections.forEach(line => {
+        line.material.opacity = 0.5 + Math.sin(Date.now() * 0.005) * 0.5;
+    });
+}
+
+function connectStars(fromNode, toNode) {
+    if (!toNode) return;
+
+    const points = [];
+    points.push(fromNode.position.clone());
+    points.push(toNode.position.clone());
+    const geo = new THREE.BufferGeometry().setFromPoints(points);
+    const mat = new THREE.LineBasicMaterial({ color: 0xb25cff, linewidth: 3, transparent: true, opacity: 0 });
+    const line = new THREE.Line(geo, mat);
+
+    scene.add(line);
+    activeConnections.push(line);
+
+    // Animate line drawing
+    gsap.to(line.material, { opacity: 1, duration: 1.5 });
 }
 
 // === NEW VISUAL SYSTEMS ===
@@ -477,6 +564,7 @@ function getRandomColor() {
     return GALAXY_CONFIG.colors[Math.floor(Math.random() * GALAXY_CONFIG.colors.length)];
 }
 
+// 480: setupInteraction function definition ...
 function setupInteraction() {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
@@ -511,13 +599,39 @@ function setupInteraction() {
 
         const intersects = raycaster.intersectObjects(interactables);
         if (intersects.length > 0) {
-            const item = intersects[0].object.userData.data;
-            if (item.type === 'photo' || item.image) {
+            const obj = intersects[0].object;
+            const item = obj.userData.data;
+
+            if (item && (item.type === 'photo' || item.image)) {
                 // Open Lightbox
                 modalImg.src = item.image;
                 modalCap.innerText = item.caption;
                 modal.style.display = 'flex';
                 isModalOpen = true;
+            }
+            else if (obj.userData.type === 'constellation') {
+                // Handle Constellation Click
+                const idx = obj.userData.id;
+
+                // Show tooltip permanently or animate
+                gsap.to(obj.scale, { x: 3, y: 3, duration: 0.5, yoyo: true, repeat: 1 });
+
+                // Connect to next star if exists
+                if (idx < constellationNodes.length - 1) {
+                    connectStars(constellationNodes[idx], constellationNodes[idx + 1]);
+                }
+
+                // Show info in tooltip
+                tooltip.style.opacity = 1;
+                tooltip.innerHTML = `
+                    <div style="text-align:center;">
+                        <span style="font-size:1.2rem; color:#ffeb3b;">★ ${item.date} ★</span><br>
+                        <span style="font-size:1rem; color:#fff;">${item.label}</span><br>
+                        <span style="font-size:0.8rem; color:#ccc;">${item.desc}</span>
+                    </div>
+                `;
+                tooltip.style.left = e.clientX + 10 + 'px';
+                tooltip.style.top = e.clientY + 10 + 'px';
             }
         }
     });
@@ -532,15 +646,26 @@ function setupInteraction() {
         const intersects = raycaster.intersectObjects(interactables);
         if (intersects.length > 0) {
             document.body.style.cursor = 'pointer';
-            // Scale up
-            gsap.to(intersects[0].object.scale, { x: 1.5, y: 1.5, duration: 0.2 });
+            const obj = intersects[0].object;
+
+            // Tooltip logic
+            if (obj.userData.type === 'constellation') {
+                // don't scale constellation on hover, just cursor
+            } else {
+                gsap.to(obj.scale, { x: 1.5, y: 1.5, duration: 0.2 });
+            }
+
         } else {
             document.body.style.cursor = 'default';
-            // Reset scales
+            // Reset scales for non-constellation items
             interactables.forEach(obj => {
-                const baseScale = obj.userData.type === 'note' ? 20 : 1;
-                gsap.to(obj.scale, { x: baseScale, y: (obj.userData.type === 'note' ? 10 : 1), duration: 0.2 });
+                if (obj.userData.type !== 'constellation') {
+                    const baseScale = obj.userData.type === 'note' ? 20 : 1;
+                    gsap.to(obj.scale, { x: baseScale, y: (obj.userData.type === 'note' ? 10 : 1), duration: 0.2 });
+                }
             });
+            // Hide tooltip if not clicked (optional, keeps it cleaner)
+            // tooltip.style.opacity = 0; 
         }
     });
 }
