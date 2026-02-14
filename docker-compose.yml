@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  purple-protocol:
+    build: .
+    container_name: purple-protocol
+    ports:
+      - "8080:80"
+    restart: unless-stopped

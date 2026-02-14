@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SECURITY CHECK</title>
+    <style>
+        body { background-color: #0d0208; color: #00ff41; font-family: 'Courier New', monospace; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .terminal { border: 1px solid #00ff41; padding: 20px; width: 85%; max-width: 500px; box-shadow: 0 0 15px rgba(0, 255, 65, 0.3); background: rgba(0,0,0,0.9); }
+        input { background: transparent; border: none; border-bottom: 2px solid #00ff41; color: #d600ff; font-size: 1.2rem; outline: none; width: 100%; margin-top: 20px; font-family: inherit; border-radius: 0; }
+        .hidden { display: none; }
+        #cursor { animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <p><span id="typewriter"></span><span id="cursor">█</span></p>
+        <input type="text" id="password" placeholder="TYPE NAME HERE..." class="hidden" autocomplete="off">
+    </div>
+
+    <script>
+        // THE HACKER SCRIPT
+        const text = "SYSTEM LOCKED. \nTARGET: The Cool Mathematics Girly Pop.\nIDENTIFY YOURSELF:";
+        const typeWriterElement = document.getElementById('typewriter');
+        const inputElement = document.getElementById('password');
+        let i = 0;
+
+        function type() {
+            if (i < text.length) {
+                typeWriterElement.innerText += text.charAt(i);
+                i++;
+                setTimeout(type, 50);
+            } else {
+                document.getElementById('cursor').style.display = 'none';
+                inputElement.classList.remove('hidden');
+                inputElement.focus();
+            }
+        }
+        
+        // Start typing after 1 second
+        setTimeout(type, 1000);
+
+        inputElement.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                document.body.innerHTML = "<h1 style='color:#d600ff; text-align:center; font-size:2rem;'>ACCESS GRANTED 💜</h1>";
+                // Redirect to the 3D Universe
+                setTimeout(() => { window.location.href = 'universe.html'; }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

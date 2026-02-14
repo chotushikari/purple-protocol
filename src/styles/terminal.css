@@ -1,0 +1,95 @@
+/* Matrix Rain Canvas */
+#matrix-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+#terminal-ui {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2rem;
+    border: 1px solid var(--neon-green);
+    box-shadow: 0 0 20px var(--neon-green);
+    font-family: 'Courier New', monospace;
+}
+
+.terminal-text {
+    color: var(--neon-green);
+    font-size: 1.2rem;
+    line-height: 1.5;
+    min-height: 60px;
+    text-shadow: 0 0 5px var(--neon-green);
+}
+
+.input-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    opacity: 0;
+    /* Hidden initially */
+    transition: opacity 0.5s;
+}
+
+.input-group.visible {
+    opacity: 1;
+}
+
+#name-input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--neon-green);
+    color: var(--neon-purple);
+    font-family: inherit;
+    font-size: 1.5rem;
+    width: 100%;
+    outline: none;
+    text-transform: uppercase;
+}
+
+/* Glitch Effect Class */
+.glitch-mode {
+    animation: glitch-anim 0.3s infinite;
+    border-color: var(--neon-purple) !important;
+    box-shadow: 0 0 30px var(--neon-purple) !important;
+}
+
+.glitch-mode .terminal-text {
+    color: var(--neon-purple) !important;
+    text-shadow: 0 0 10px var(--neon-purple), 2px 2px red, -2px -2px blue;
+}
+
+@keyframes glitch-anim {
+    0% {
+        transform: translate(-50%, -50%) skew(0deg);
+    }
+
+    20% {
+        transform: translate(-52%, -48%) skew(10deg);
+    }
+
+    40% {
+        transform: translate(-48%, -52%) skew(-10deg);
+    }
+
+    60% {
+        transform: translate(-50%, -50%) skew(5deg);
+    }
+
+    80% {
+        transform: translate(-51%, -49%) skew(-5deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) skew(0deg);
+    }
+}

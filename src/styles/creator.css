@@ -1,0 +1,178 @@
+/* Creator Mode Styles */
+#creator-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    overflow-y: auto;
+    padding: 2rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.creator-header {
+    border-bottom: 1px solid var(--neon-purple);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.creator-title {
+    color: var(--neon-purple);
+    font-size: 2rem;
+    margin: 0;
+}
+
+.upload-section {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px dashed var(--neon-green);
+}
+
+.memory-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.memory-form input,
+.memory-form textarea {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--neon-purple);
+    color: #fff;
+    padding: 10px;
+    font-family: inherit;
+}
+
+.preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.memory-card {
+    width: 200px;
+    background: #fff;
+    color: #000;
+    padding: 10px 10px 40px 10px;
+    /* Polaroid padding */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transform: rotate(-2deg);
+    transition: transform 0.3s;
+}
+
+.memory-card:hover {
+    transform: rotate(0deg) scale(1.05);
+    z-index: 10;
+}
+
+.memory-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: #333;
+}
+
+.memory-caption {
+    font-family: 'Unknown', cursive;
+    /* We'll add a font */
+    font-size: 1rem;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background: var(--neon-purple);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.export-section {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--neon-green);
+    text-align: center;
+}
+
+.code-block {
+    background: #111;
+    padding: 10px;
+    border: 1px solid #333;
+    margin-top: 10px;
+    text-align: left;
+    max-height: 100px;
+    overflow: auto;
+    font-size: 0.8rem;
+}
+
+/* Creator UI Update */
+.toggle-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    background: transparent;
+    border: 1px solid var(--neon-purple);
+    color: var(--neon-purple);
+    padding: 10px 20px;
+    cursor: pointer;
+    flex: 1;
+    text-align: center;
+}
+
+.toggle-btn.active {
+    background: var(--neon-purple);
+    color: #000;
+    box-shadow: 0 0 10px var(--neon-purple);
+}
+
+.hidden-section {
+    display: none;
+}
+
+.show-section {
+    display: block;
+    animation: fadeIn 0.5s;
+}
+
+.note-card {
+    width: 150px;
+    height: 150px;
+    background: rgba(178, 92, 255, 0.2);
+    border: 1px solid var(--neon-purple);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 10px rgba(178, 92, 255, 0.2);
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.note-symbol {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.note-msg {
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 5px;
+    color: #ddd;
+}

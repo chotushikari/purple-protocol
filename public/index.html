@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#05030a" />
+  <title>PURPLE_PROTOCOL | Security Gate</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/level1.css" />
+  <style>
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: #05030a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(108, 255, 142, 0.2);
+      border-top-color: #6cff8e;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loader-text {
+      color: #6cff8e;
+      font-family: 'IBM Plex Mono', monospace;
+      letter-spacing: 2px;
+      font-size: 0.9rem;
+    }
+    .loader-bar {
+      width: 200px;
+      height: 3px;
+      background: rgba(108, 255, 142, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .loader-progress {
+      height: 100%;
+      background: linear-gradient(90deg, #6cff8e, #b25cff);
+      animation: progress 2s ease-in-out infinite;
+    }
+    @keyframes progress {
+      0% { width: 0%; }
+      50% { width: 70%; }
+      100% { width: 100%; }
+    }
+  </style>
+</head>
+<body class="screen mono">
+  <div id="preloader">
+    <div class="spinner"></div>
+    <div class="loader-text">INITIALIZING PURPLE_PROTOCOL</div>
+    <div class="loader-bar">
+      <div class="loader-progress"></div>
+    </div>
+  </div>
+
+  <main class="screen" aria-live="polite">
+    <div class="terminal-shell" id="terminal">
+      <div class="terminal-header">
+        <span>PURPLE_PROTOCOL SECURITY v4.2</span>
+        <span id="status">STATUS: LOCKED</span>
+      </div>
+      <div class="terminal-lines" id="typed"></div>
+      <div class="terminal-input">
+        <span>&gt;</span>
+        <input id="name-input" type="text" placeholder="TYPE NAME HERE" autocomplete="off" aria-label="Name" />
+      </div>
+      <div class="access-banner" id="access-banner">
+        ✓ ACCESS GRANTED. WELCOME, <span id="user-name"></span>.
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <script src="js/transitions.js"></script>
+  <script src="js/level1.js"></script>
+</body>
+</html>

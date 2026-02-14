@@ -1,0 +1,9 @@
+src/
+dockerfile
+Dockerfile
+docker-compose.yml
+nginx.conf
+.qodo/
+node_modules/
+.git/
+*.md

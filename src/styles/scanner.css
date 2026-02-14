@@ -1,0 +1,127 @@
+/* Scanner Level Styles */
+#scanner-ui {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    color: #fff;
+}
+
+.scanner-title {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: var(--neon-purple);
+    text-shadow: 0 0 10px var(--neon-purple);
+}
+
+.fingerprint-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 20px rgba(178, 92, 255, 0.2);
+    transition: all 0.3s;
+}
+
+.fingerprint-container:active {
+    transform: scale(0.95);
+    border-color: var(--neon-green);
+    box-shadow: 0 0 30px var(--neon-green);
+}
+
+.fingerprint-svg {
+    width: 80px;
+    height: 80px;
+    fill: rgba(255, 255, 255, 0.3);
+    transition: fill 0.3s;
+}
+
+.fingerprint-container.scanning .fingerprint-svg {
+    fill: var(--neon-green);
+    animation: pulse 1s infinite;
+}
+
+.scan-beam {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+    opacity: 0;
+}
+
+.fingerprint-container.scanning .scan-beam {
+    opacity: 1;
+    animation: scan 1.5s infinite linear;
+}
+
+@keyframes scan {
+    0% {
+        top: 0;
+    }
+
+    100% {
+        top: 100%;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.status-text {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    color: var(--neon-green);
+    min-height: 2rem;
+}
+
+.success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s;
+}
+
+.success-title {
+    font-size: 3rem;
+    color: var(--neon-pink);
+    text-shadow: 0 0 20px var(--neon-pink);
+    margin-bottom: 2rem;
+}
+
+.download-msg {
+    color: #fff;
+    font-size: 1.2rem;
+}
