@@ -1,127 +1,149 @@
 import Typed from 'typed.js';
 import { config } from '../config.js';
-import '../styles/terminal.css';
+import '../styles/terminal.css'; // We will overhaul the CSS file itself next
 
-let matrixInterval;
+let particleInterval;
 
 export function mountLevel1(container, onComplete, onCreatorMode) {
+    // New Structure: Glass Card in the center
     container.innerHTML = `
-    <canvas id="matrix-canvas"></canvas>
-    <div id="terminal-ui">
-      <div id="typewriter" class="terminal-text"></div>
-      <div class="input-group" id="input-container">
-        <span style="color: var(--neon-purple)">></span>
-        <input type="text" id="name-input" autocomplete="off" autofocus>
-      </div>
+    <div id="cute-bg"></div>
+    <canvas id="emoji-canvas"></canvas>
+    
+    <div id="love-portal" class="glass-card">
+        <h1 class="bounce-title">✨ The Vibe Check ✨</h1>
+        <div id="funny-text" class="status-msg"></div>
+        
+        <div class="input-zone hidden" id="input-zone">
+            <input type="text" id="name-input" placeholder="Who are you?" autocomplete="off">
+            <button id="go-btn">💅</button>
+        </div>
     </div>
   `;
 
-    startMatrixRain();
-    startTerminalSequence(onComplete, onCreatorMode);
+    startEmojiRain(); // Background chaos
+    startSassyDialogue(onComplete, onCreatorMode);
 }
 
-function startMatrixRain() {
-    const canvas = document.getElementById('matrix-canvas');
+function startEmojiRain() {
+    const canvas = document.getElementById('emoji-canvas');
     const ctx = canvas.getContext('2d');
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const symbols = "∑π∞∫√≈≠≤≥÷tan(x)cos(y)♥♡love+=-";
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
+    // The "Math & Love" Chaos Mix
+    const emojis = ["❤️", "💖", "✨", "∫", "π", "x²", "🦋", "🧸", "⚛️", "🍬"];
+    const particles = [];
 
-    function draw() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 20 + 10;
+            this.speedY = Math.random() * 2 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 1;
+            this.emoji = emojis[Math.floor(Math.random() * emojis.length)];
+            this.spin = Math.random() * 0.2 - 0.1;
+            this.angle = 0;
+        }
+        update() {
+            this.y -= this.speedY; // Float UP floating bubbles
+            this.x += this.speedX;
+            this.angle += this.spin;
 
-        ctx.fillStyle = '#b25cff'; // Neon Purple
-        ctx.font = fontSize + 'px monospace';
-
-        for (let i = 0; i < drops.length; i++) {
-            const text = symbols.charAt(Math.floor(Math.random() * symbols.length));
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
+            if (this.y < -50) {
+                this.y = canvas.height + 50;
+                this.x = Math.random() * canvas.width;
             }
-            drops[i]++;
+        }
+        draw() {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.angle);
+            ctx.font = `${this.size}px Arial`;
+            ctx.fillText(this.emoji, 0, 0);
+            ctx.restore();
         }
     }
 
-    matrixInterval = setInterval(draw, 33);
+    // Create 50 particles
+    for (let i = 0; i < 50; i++) particles.push(new Particle());
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
 }
 
-function startTerminalSequence(onComplete, onCreatorMode) {
-    const typed = new Typed('#typewriter', {
+function startSassyDialogue(onComplete, onCreatorMode) {
+    const typed = new Typed('#funny-text', {
         strings: [
-            "CALCULATING COMPATIBILITY...",
-            "SOLVING FOR X WHERE X = YOU...",
-            "INTEGRATING FEELINGS OVER TIME...",
-            "RESULT: INFINITE LOVE DETECTED.",
-            "ENTER PASSPHRASE TO CONFIRM."
+            "Wait... who is this?",
+            "Are you like... the chosen one? 🤨",
+            "Or just a random fan?",
+            "Let's test your math...",
+            "Just kidding, tell me your name! 💖"
         ],
-        typeSpeed: 30,
-        backSpeed: 10,
+        typeSpeed: 40,
+        backSpeed: 20,
+        backDelay: 1500,
+        showCursor: false,
         onComplete: () => {
-            document.getElementById('input-container').classList.add('visible');
+            document.getElementById('input-zone').classList.remove('hidden');
             const input = document.getElementById('name-input');
             input.focus();
-            input.addEventListener('keypress', (e) => handleInput(e, onComplete, onCreatorMode));
+
+            // Handle interactions
+            const checkName = () => {
+                const val = input.value.trim().toLowerCase();
+                const portal = document.getElementById('love-portal');
+
+                if (val === config.creator.password.toLowerCase()) {
+                    // Creator
+                    portal.innerHTML = "<h1>👑 QUEEN/KING DETECTED 👑</h1>";
+                    setTimeout(onCreatorMode, 1000);
+                } else if (val === config.identity.name.toLowerCase()) {
+                    // The Soulmate
+                    portal.innerHTML = `
+                        <h1 class="success-anim">OMG IT'S YOU! 😱💖</h1>
+                        <p>Calculations correct!</p>
+                    `;
+                    launchConfetti();
+                    setTimeout(onComplete, 2500);
+                } else {
+                    // Wrong person
+                    input.classList.add('shake');
+                    input.value = "";
+                    input.placeholder = "Nah, try again bestie 💅";
+                    setTimeout(() => input.classList.remove('shake'), 500);
+                }
+            };
+
+            document.getElementById('go-btn').addEventListener('click', checkName);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') checkName();
+            });
         }
     });
 }
 
-function handleInput(e, onComplete, onCreatorMode) {
-    if (e.key === 'Enter') {
-        const value = e.target.value.trim().toLowerCase();
-        const ui = document.getElementById('terminal-ui');
-        const input = document.getElementById('name-input');
-        const typewriter = document.getElementById('typewriter');
 
-        // Creator Mode
-        if (value === config.creator.password.toLowerCase()) {
-            ui.classList.add('glitch-mode');
-            typewriter.innerHTML = `<span style="color:var(--neon-green)">CREATOR ACCESS GRANTED.</span>`;
-            setTimeout(() => {
-                onCreatorMode();
-            }, 1000);
-            return;
-        }
-
-        // Easter Eggs
-        if (config.terminal.easterEggs[value]) {
-            // Show easter egg temporarily then clear
-            typewriter.innerHTML = `<span style="color:var(--neon-pink)">${config.terminal.easterEggs[value]}</span>`;
-            input.value = "";
-            setTimeout(() => {
-                typewriter.innerHTML = "IDENTIFY YOURSELF.";
-            }, 3000);
-            return;
-        }
-
-        // Success
-        if (value === config.identity.name.toLowerCase()) {
-            // Glitch Effect
-            ui.classList.add('glitch-mode');
-            input.disabled = true;
-
-            // Change Matrix Color to Purple
-            clearInterval(matrixInterval); // Stop green rain
-            // (Optional: restart purple rain, but simpler to just glitch out)
-
-            typewriter.innerHTML = `<span style="color:var(--neon-purple)">ACCESS GRANTED.<br>WELCOME, ${config.identity.title}.</span>`;
-
-            setTimeout(() => {
-                onComplete(); // Transition to Level 2
-            }, 2000);
-        } else {
-            // Failure
-            ui.style.animation = "shake 0.5s";
-            input.value = "";
-            input.placeholder = "ACCESS DENIED";
-            setTimeout(() => ui.style.animation = "", 500);
-        }
-    }
+function launchConfetti() {
+    // Simple placeholder for the confetti visual effect logic
+    // We assume confetti library surrounds this or global canvas-confetti
+    import('canvas-confetti').then((module) => {
+        const confetti = module.default;
+        confetti({
+            particleCount: 150,
+            spread: 100,
+            origin: { y: 0.6 },
+            colors: ['#ff9a9e', '#a18cd1', '#fbc2eb']
+        });
+    });
 }
