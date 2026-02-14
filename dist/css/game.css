@@ -1,0 +1,53 @@
+body {
+  background: radial-gradient(circle at top, #120726 0%, #05030a 60%);
+}
+
+#game-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+#hud {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: rgba(8, 3, 15, 0.75);
+  border: 1px solid rgba(178, 92, 255, 0.4);
+  box-shadow: var(--shadow), 0 8px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  font-size: 1rem;
+}
+
+#hud span {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(178, 92, 255, 0.6);
+}
+
+#message {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+#message .panel {
+  text-align: center;
+  max-width: 320px;
+}
+
+#message h2 {
+  margin-top: 0;
+}
+
+#message p {
+  color: rgba(255, 255, 255, 0.75);
+}

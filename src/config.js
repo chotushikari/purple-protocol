@@ -30,7 +30,7 @@ export const config = {
 
     // Level 2: BTS Math Galaxy
     galaxy: {
-        musicTrack: "assets/audio/song.mp3", // Correct path to public/assets/audio/
+        musicTrack: "/assets/audio/song.mp3", // Absolute path to public/assets/audio/
         starCount: 5000,
         reasons: [
             "Your smile lights up the universe.",

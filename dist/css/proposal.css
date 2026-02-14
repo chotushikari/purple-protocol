@@ -1,0 +1,62 @@
+#stage {
+  position: absolute;
+  inset: 0;
+}
+
+#proposal-ui {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8vh;
+  pointer-events: none;
+}
+
+#proposal-ui .panel {
+  text-align: center;
+  pointer-events: auto;
+  min-width: min(420px, 90vw);
+}
+
+#proposal-ui h1 {
+  margin-top: 0;
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+}
+
+#proposal-ui p {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+#proposal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+#no-btn {
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+#no-btn:hover {
+  transform: scale(0.95);
+  opacity: 0.6;
+}
+
+#yes-btn {
+  background: linear-gradient(135deg, rgba(178, 92, 255, 0.4), rgba(138, 43, 226, 0.5));
+  border-color: rgba(178, 92, 255, 0.7);
+  box-shadow: 0 0 30px rgba(178, 92, 255, 0.5), 0 8px 20px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+#yes-btn:hover {
+  box-shadow: 0 0 50px rgba(178, 92, 255, 0.8), 0 8px 25px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, rgba(178, 92, 255, 0.5), rgba(138, 43, 226, 0.6));
+}

@@ -69,7 +69,13 @@ async function loadMemories() {
         if (!Array.isArray(data)) data = [];
         return data;
     } catch (e) {
-        console.warn("Loading Failed:", e);
+        console.error("Loading Failed:", e);
+        // User feedback for failure
+        const loader = document.getElementById('loading-indicator');
+        if (loader) {
+            loader.innerText = "Error loading memories. Please check console.";
+            loader.style.color = "red";
+        }
         return [];
     }
 }
@@ -126,7 +132,9 @@ function initThreeJS(canvas, rawMemories, onNextLevel) {
 
     // 3. Environment: Stars & Dust
     createStarfield();
-    createShootingStars(); // NEW: Shooting Stars
+    createShootingStars();
+    createLightning(); // NEW: Lightning Storm
+    createFloatingGeo(); // NEW: 3D Shapes
 
     // 4. Interaction
     setupInteraction();
@@ -156,33 +164,132 @@ function initThreeJS(canvas, rawMemories, onNextLevel) {
         if (!isModalOpen) {
             // Scroll flight
             targetScrollY += (scrollY - targetScrollY) * 0.05;
-            camera.position.z = 100 - (targetScrollY * 0.8); // Fast travel
+            camera.position.z = 100 - (targetScrollY * 0.8);
 
             // Dynamic rotation
             scene.rotation.z += 0.0005;
+
+            // Infinite Loop Logic
+            if (camera.position.z < -10000) {
+                targetScrollY = 0;
+                scrollY = 0;
+                camera.position.z = 100;
+            }
         }
 
         // Object Animations
         interactables.forEach((mesh, i) => {
             if (mesh.userData.type === 'photo') {
-                mesh.lookAt(camera.position); // Billboarding
+                mesh.lookAt(camera.position);
+            } else if (mesh.userData.type === 'geo') {
+                mesh.rotation.x += 0.01;
+                mesh.rotation.y += 0.02;
             } else {
                 mesh.rotation.y += 0.01;
                 mesh.rotation.z += 0.005;
             }
         });
 
-        // Ambient particles drift
+        // Ambient particles drift & Pulse
         particles.forEach((p, i) => {
             p.position.y += Math.sin(Date.now() * 0.001 + i) * 0.1;
+            // Pulse size
+            if (i % 3 === 0) {
+                p.scale.setScalar(1 + Math.sin(Date.now() * 0.005 + i) * 0.5);
+            }
         });
 
-        // Shooting Stars Animation
+        // Effect Updates
         updateShootingStars();
+        updateLightning();
 
         renderer.render(scene, camera);
     };
     animate();
+}
+
+// === NEW VISUAL SYSTEMS ===
+
+// 1. Lightning System
+let lightnings = [];
+function createLightning() {
+    for (let i = 0; i < 3; i++) {
+        const geo = new THREE.BufferGeometry();
+        const count = 20; // Segments
+        const pos = new Float32Array(count * 3);
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+
+        const mat = new THREE.LineBasicMaterial({
+            color: 0xffffff, // White hot
+            transparent: true,
+            opacity: 0,
+            linewidth: 2
+        });
+
+        const line = new THREE.Line(geo, mat);
+        scene.add(line);
+        lightnings.push(line);
+    }
+}
+
+function updateLightning() {
+    lightnings.forEach(line => {
+        if (Math.random() < 0.01) { // 1% chance to strike per frame
+            // Randomize position
+            const x = (Math.random() - 0.5) * 1000;
+            const y = (Math.random() - 0.5) * 1000;
+            const z = camera.position.z - 200 - Math.random() * 500;
+
+            const positions = line.geometry.attributes.position.array;
+            let currentY = y;
+            for (let i = 0; i < 20; i++) {
+                positions[i * 3] = x + (Math.random() - 0.5) * 50; // Jitter X
+                positions[i * 3 + 1] = currentY;
+                positions[i * 3 + 2] = z;
+                currentY -= 20 + Math.random() * 20; // Downward
+            }
+            line.geometry.attributes.position.needsUpdate = true;
+
+            // Flash on
+            line.material.opacity = 1;
+            line.userData.flash = 10; // Frames to stay visible
+        } else if (line.userData.flash > 0) {
+            line.userData.flash--;
+            line.material.opacity = Math.random(); // Flicker effect
+        } else {
+            line.material.opacity = 0;
+        }
+    });
+}
+
+// 2. Floating 3D Geometry
+function createFloatingGeo() {
+    const geometries = [
+        new THREE.IcosahedronGeometry(10, 0),
+        new THREE.TorusKnotGeometry(8, 3, 100, 16),
+        new THREE.OctahedronGeometry(12)
+    ];
+
+    for (let i = 0; i < 30; i++) {
+        const geo = geometries[Math.floor(Math.random() * geometries.length)];
+        const mat = new THREE.MeshBasicMaterial({
+            color: getRandomColor(),
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3
+        });
+
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(
+            (Math.random() - 0.5) * 600,
+            (Math.random() - 0.5) * 600,
+            -Math.random() * 4000
+        );
+        mesh.userData = { type: 'geo' };
+
+        scene.add(mesh);
+        interactables.push(mesh);
+    }
 }
 
 // Shooting Stars System
