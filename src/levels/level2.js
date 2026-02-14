@@ -389,7 +389,8 @@ function createAmbientFloaters() {
 }
 
 function createPolaroid(item, x, y, z) {
-    const geometry = new THREE.PlaneGeometry(20, 25);
+    // Doubled the size for better visibility!
+    const geometry = new THREE.PlaneGeometry(40, 50);
     const texture = createPolaroidTexture(item);
     const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
     const mesh = new THREE.Mesh(geometry, material);
