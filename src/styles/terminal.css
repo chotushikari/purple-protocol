@@ -1,162 +1,95 @@
-/* Dreamy Background */
-#cute-bg {
+/* Matrix Rain Canvas */
+#matrix-canvas {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
-    background: radial-gradient(circle at center, #cd9cf2 0%, #f6f3ff 100%);
     z-index: 0;
 }
 
-#emoji-canvas {
+#terminal-ui {
     position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-
-/* Glass Card "Portal" */
-.glass-card {
-    position: absolute;
+    z-index: 10;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 500px;
-    background: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    padding: 3rem 2rem;
-    text-align: center;
-    z-index: 10;
-    font-family: 'Outfit', sans-serif;
-    color: #5e3b8a;
+    width: 80%;
+    max-width: 600px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2rem;
+    border: 1px solid var(--neon-purple);
+    box-shadow: 0 0 20px var(--neon-purple);
+    font-family: 'Courier New', monospace;
 }
 
-.bounce-title {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    animation: bounce 2s infinite;
-    background: -webkit-linear-gradient(#f77062, #fe5196);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.terminal-text {
+    color: var(--neon-purple);
+    font-size: 1.2rem;
+    line-height: 1.5;
+    min-height: 60px;
+    text-shadow: 0 0 5px var(--neon-purple);
 }
 
-.status-msg {
-    font-size: 1.5rem;
-    min-height: 80px;
-    margin-bottom: 2rem;
-    font-weight: 500;
-}
-
-/* Cute Input Zone */
-.input-zone {
+.input-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.5s ease;
+    /* Hidden initially */
+    transition: opacity 0.5s;
 }
 
-.input-zone.hidden {
-    display: none;
-}
-
-.input-zone:not(.hidden) {
+.input-group.visible {
     opacity: 1;
-    transform: translateY(0);
 }
 
 #name-input {
-    width: 60%;
-    padding: 12px 20px;
-    border-radius: 50px;
-    border: 2px solid #fff;
-    background: rgba(255, 255, 255, 0.8);
-    font-size: 1.2rem;
-    color: #a18cd1;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--neon-purple);
+    color: var(--neon-purple);
+    font-family: inherit;
+    font-size: 1.5rem;
+    width: 100%;
     outline: none;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s;
+    text-transform: uppercase;
 }
 
-#name-input:focus {
-    transform: scale(1.05);
-    border-color: #fe5196;
+/* Glitch Effect Class */
+.glitch-mode {
+    animation: glitch-anim 0.3s infinite;
+    border-color: var(--neon-purple) !important;
+    box-shadow: 0 0 30px var(--neon-purple) !important;
 }
 
-#go-btn {
-    padding: 10px 15px;
-    border-radius: 50%;
-    margin-left: 10px;
-    background: linear-gradient(to right, #f77062, #fe5196);
-    color: white;
-    font-size: 1.2rem;
-    box-shadow: 0 4px 15px rgba(254, 81, 150, 0.4);
+.glitch-mode .terminal-text {
+    color: var(--neon-purple) !important;
+    text-shadow: 0 0 10px var(--neon-purple), 2px 2px red, -2px -2px blue;
 }
 
-#go-btn:hover {
-    transform: rotate(15deg) scale(1.1);
-}
-
-/* Animations */
-@keyframes bounce {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-.shake {
-    animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
-}
-
-@keyframes shake {
-
-    10%,
-    90% {
-        transform: translate3d(-1px, 0, 0);
-    }
-
-    20%,
-    80% {
-        transform: translate3d(2px, 0, 0);
-    }
-
-    30%,
-    50%,
-    70% {
-        transform: translate3d(-4px, 0, 0);
-    }
-
-    40%,
-    60% {
-        transform: translate3d(4px, 0, 0);
-    }
-}
-
-.success-anim {
-    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    color: #fe5196;
-}
-
-@keyframes popIn {
+@keyframes glitch-anim {
     0% {
-        opacity: 0;
-        transform: scale(0.5);
+        transform: translate(-50%, -50%) skew(0deg);
+    }
+
+    20% {
+        transform: translate(-52%, -48%) skew(10deg);
+    }
+
+    40% {
+        transform: translate(-48%, -52%) skew(-10deg);
+    }
+
+    60% {
+        transform: translate(-50%, -50%) skew(5deg);
+    }
+
+    80% {
+        transform: translate(-51%, -49%) skew(-5deg);
     }
 
     100% {
-        opacity: 1;
-        transform: scale(1);
+        transform: translate(-50%, -50%) skew(0deg);
     }
 }
