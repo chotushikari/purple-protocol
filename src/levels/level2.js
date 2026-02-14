@@ -336,13 +336,16 @@ function updateShootingStars() {
 }
 
 function createHelix(items) {
-    const radius = 50;
-    const step = 40; // Vertical distance
+    const radius = 120; // BIG & WIDE!
+    const step = 30; // Dense vertically
 
     items.forEach((item, i) => {
-        const angle = i * 0.4;
-        const x = Math.cos(angle) * radius;
-        const y = Math.sin(angle) * radius;
+        const angle = i * 0.25; // Gentle rotation
+        // Organic Jitter (so it looks like a galaxy, not a math equation)
+        const jitter = (Math.random() - 0.5) * 60;
+
+        const x = Math.cos(angle) * radius + jitter;
+        const y = Math.sin(angle) * radius + jitter;
         const z = -i * step;
 
         if (item.type === 'photo' || item.image) {
